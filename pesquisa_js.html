@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <!-- bootstrap 4 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+
+    <title>Document</title>
+</head>
+<body>
+
+    <div class="row m-5">
+        <div class="col-12">
+            <div class="dropdown responsive">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownProjects" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Projeto
+                </button>
+                <div class="dropdown-menu allow-focus" aria-labelledby="dropdownProjects">
+                    <div class="input-group mx-auto col mb-2">
+                        <input type="text" class="form-control" style="" id="pesquisa" placeholder="Digite para pesquisar">
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-primary w-100 stoppropagation" type="button" id="clear_selections_projects">
+                            Limpar seleção
+                        </button>
+                    </div>
+                    <hr>
+                    <ul id="lista" class="checkbox-menu col" style="max-height: 280px; overflow-y: auto;;">
+                        <!--  -->
+                    </ul>                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    <script>
+
+        var cidades = [
+            "Alabama", "Arizona", "California", "Carolina do Norte", "Florida", "Indiona", "Montana", "Texas", "Virginia", "Washingtion",
+            "Tóquio", "Déli", "Xangai", "São Paulo", "Cidade do México", "Cairo", "Mumbai", "Pequim", "Daca", "Osaka", "Nova lorque", 
+            "Carachi", "Buenos Aires", "Xunquim", "Istambul", "Calcutá", "Manila", "Lagos", "Rio de Janeiro", "Tianjin", "Quinxassa",
+            "Cantão", "Los Angeles", "Moscou", "Shenzhen", "Lahore", "Bangalor", "Paris", "Bogotá", "Jacarta", "Chenai", "Lima",
+            "Banguecoque","Seul","Nagoia","Haiderabade", "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        ];
+
+        // Ordenando a lista
+        cidades = cidades.sort();
+
+        function titleString(txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        }
+
+        // Criando elementos
+        var ul_cidades = document.getElementById("lista");
+
+        for (let i of cidades) {
+            ul_cidades.innerHTML += `
+                <div class="stoppropagation">
+                    <input class="" type="checkbox" value="" id="${i.toLowerCase()}">
+                    <label class="form-check-label" for="${i.toLowerCase()}">
+                        ${titleString(i)}
+                    </label>
+                </div>
+            `;
+        }
+        
+        ul_cidades.innerHTML += `
+            <div style="display: none;">
+                <label for="form-label text-center" id="lista_nao_encontrada">Nenhum registro encontrado dadawdawdawdawdawd.</label>
+            </div>
+        `;
+
+        // remove a saida do elemento quando é clicado
+        document.querySelectorAll('.stoppropagation').forEach(function(e, i){
+            e.addEventListener('click', function (e){
+                e.stopPropagation();
+            });
+        });
+        
+        pesquisa.onkeyup = function (e) {
+            t = this.value.toLowerCase();
+            r = new RegExp(t, "g");
+            li_lista = lista.children; // ul
+            _count = 0;
+            
+            for (i in li_lista) {
+                try {
+                    let b = li_lista[i].textContent.toLowerCase().match(r);
+                    if (b) {
+                        if (li_lista[i].children[0].id == "lista_nao_encontrada") {
+                            if (!lista.children[i].style.display) {
+                                lista.children[i].style.display = "none";
+                            }
+                        } else {
+                            li_lista[i].removeAttribute('style');
+                        }
+                    } else {
+                        _count += 1;                 
+                        li_lista[i].style.display = "none";
+                    }
+                } catch (error) {
+                    continue
+                }
+            }
+            
+            if (_count == li_lista.length) {
+                document.getElementById('lista_nao_encontrada').parentElement.removeAttribute('style');
+            }
+        }
+
+        clear_selections_projects.addEventListener('click', function(){
+            li_lista = lista.children; // ul
+            for (i in li_lista) {
+                try {
+                    if(li_lista[i].children[0].checked){
+                        li_lista[i].children[0].checked = false;
+                    }
+                } catch (error) {
+                    continue
+                }
+            }
+        });
+    </script>
+</body>
+</html>
